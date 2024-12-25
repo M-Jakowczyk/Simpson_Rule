@@ -16,16 +16,32 @@
         </Grid.ColumnDefinitions>
 
         <!-- Control Panel -->
-        <StackPanel Grid.Column="0">
+        <StackPanel Grid.Column="0" Margin="5 2 5 2">
             <!-- Choose function -->
             <TextBlock 
                 Text="Wybierz funkcję:"
                 FontWeight="Bold"
                 />
+            <ComboBox x:Name="MyComboBox" SelectionChanged="MyComboBox_Selected">
+                <ComboBoxItem x:Name="SinX" Content="f(x) = sin(x)" />
+                <ComboBoxItem x:Name="OneByX" Content="f(x) = 1/x" />
+                <ComboBoxItem x:Name="eToPowerX" Content="f(x) = e^x" />
+                <ComboBoxItem x:Name="XSinX" Content="f(x) = x*sin(x)" />
+                <ComboBoxItem x:Name="xPlus2SinX" Content="f(x) = x+2*sin(x)" />
+                <ComboBoxItem x:Name="eToPowerMinusX" Content="f(x) = e^(-x)" />
+                <ComboBoxItem x:Name="XPower2" Content="f(x) = x^2" />
+                <ComboBoxItem x:Name="OneByXPower2Plus1" Content="f(x) = 1/(x^2+1)" />
+            </ComboBox>
+            <!--
             <RadioButton Checked="RadioButton_Checked" x:Name="SinX" Content="f(x) = sin(x)" />
             <RadioButton Checked="RadioButton_Checked" x:Name="OneByX" Content="f(x) = 1/x" />
             <RadioButton Checked="RadioButton_Checked" x:Name="eToPowerX" Content="f(x) = e^x" />
             <RadioButton Checked="RadioButton_Checked" x:Name="XSinX" Content="f(x) = x*sin(x)" />
+            <RadioButton Checked="RadioButton_Checked" x:Name="xPlus2SinX" Content="f(x) = x+2*sin(x)" />
+            <RadioButton Checked="RadioButton_Checked" x:Name="eToPowerMinusX" Content="f(x) = e^(-x)" />
+            <RadioButton Checked="RadioButton_Checked" x:Name="XPower2" Content="f(x) = x^2" />
+            <RadioButton Checked="RadioButton_Checked" x:Name="OneByXPower2Plus1" Content="f(x) = 1/(x^2+1)" />
+-->
 
             <!-- Boundaries -->
             <TextBlock 
@@ -56,9 +72,16 @@
                 Text="Liczba przedziałów całkowania:"
                 FontWeight="Bold" 
                 Margin="0 5 0 0"/>
-            <TextBox x:Name="IntergrationIntervals"
-                     Padding="2" 
-                     PreviewTextInput="PreviewTextInput"/>
+            <Slider x:Name="Intervals"
+                    Minimum="0"
+                    Maximum="100"
+                    TickPlacement="BottomRight"
+                    TickFrequency="2"
+                    IsSnapToTickEnabled="True"
+                   Margin="10 5 10 5"
+                   AutoToolTipPlacement="TopLeft" 
+                    AutoToolTipPrecision="0" />
+
 
             <!-- button -->
             <Button 
@@ -80,7 +103,8 @@
             <TextBox x:Name="Error" 
                      FontWeight="Bold"
                      Foreground="OrangeRed"
-                     Visibility="Hidden"/>  
+                     Visibility="Hidden"/>
+            
         </StackPanel>
 
         <StackPanel Grid.Column="1">

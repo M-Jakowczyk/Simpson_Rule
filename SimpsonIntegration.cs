@@ -8,12 +8,12 @@ namespace Simpson_Rule
 {
     static class SimpsonIntegration
     {
-        // Metoda do obliczania całki za pomocą złożonej kwadratury Simpsona
+       // Metoda do obliczania całki za pomocą złożonej kwadratury Simpsona
         static public double SimpsonRule(Func<double, double> func, double a, double b, int n)
         {
             if (n % 2 != 0)
             {
-                throw new ArgumentException("Liczba podziałów (n) musi być parzysta.");
+                throw new ArgumentException($"Liczba podziałów (n={n}) musi być parzysta.");
             }
 
             double h = (b - a) / n;

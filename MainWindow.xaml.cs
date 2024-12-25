@@ -47,6 +47,19 @@ namespace Simpson_Rule
                 case "XSinX":
                     SelectedFunction = x => x * Math.Sin(x);
                     break;
+
+                case "xPlus2SinX":
+                    SelectedFunction = x => x + 2*Math.Sin(x);
+                    break;
+                case "eToPowerMinusX":
+                    SelectedFunction = x => Math.Exp(-x);
+                    break;
+                case "XPower2":
+                    SelectedFunction = x => Math.Pow(x, 2);
+                    break;
+                case "OneByXPower2Plus1":
+                    SelectedFunction = x => Math.Pow(x, 2);
+                    break;
             }
         }
 
@@ -56,11 +69,11 @@ namespace Simpson_Rule
         {
             double result = double.MinValue;
             double result1 = double.MinValue;
-            if (SelectedFunction != null && BoundMin.Text != "" && BoundMax.Text != "" && IntergrationIntervals.Text != "")
+            if (SelectedFunction != null && BoundMin.Text != "" && BoundMax.Text != "" && Intervals.Value != 0)
             {
                 double min = double.Parse(BoundMin.Text);
                 double max = double.Parse(BoundMax.Text);
-                int intervals = int.Parse(IntergrationIntervals.Text);
+                int intervals = (int)Intervals.Value;
                 if (max < min)
                 {
                     var temp = min;
@@ -100,6 +113,46 @@ namespace Simpson_Rule
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void MyComboBox_Selected(object sender, RoutedEventArgs e)
+        {
+            if (MyComboBox.SelectedItem != null)
+            {
+                ComboBoxItem selected = (ComboBoxItem)MyComboBox.SelectedItem;
+                FunctionName = selected.Content.ToString();
+                switch (selected.Name)
+                {
+                    case "SinX":
+                        SelectedFunction = Math.Sin;
+                        break;
+
+                    case "OneByX":
+                        SelectedFunction = x => 1 / x;
+                        break;
+
+                    case "eToPowerX":
+                        SelectedFunction = Math.Exp;
+                        break;
+
+                    case "XSinX":
+                        SelectedFunction = x => x * Math.Sin(x);
+                        break;
+
+                    case "xPlus2SinX":
+                        SelectedFunction = x => x + 2 * Math.Sin(x);
+                        break;
+                    case "eToPowerMinusX":
+                        SelectedFunction = x => Math.Exp(-x);
+                        break;
+                    case "XPower2":
+                        SelectedFunction = x => Math.Pow(x, 2);
+                        break;
+                    case "OneByXPower2Plus1":
+                        SelectedFunction = x => 1/(Math.Pow(x, 2)+1);
+                        break;
+                }
+            }
         }
     }
 }

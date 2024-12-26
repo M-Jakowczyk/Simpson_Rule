@@ -19,7 +19,11 @@ namespace Simpson_Rule
     {
         private Func<double,double> SelectedFunction;
         private string FunctionName;
-        
+        private double _minValue;
+        private double _maxValue;
+        private int _interValue;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -69,44 +73,61 @@ namespace Simpson_Rule
         {
             double result = double.MinValue;
             double result1 = double.MinValue;
-            if (SelectedFunction != null && BoundMin.Text != "" && BoundMax.Text != "" && Intervals.Value != 0)
+
+            if (CheckInputData())
             {
-                double min = double.Parse(BoundMin.Text);
-                double max = double.Parse(BoundMax.Text);
-                int intervals = (int)Intervals.Value;
-                if (max < min)
-                {
-                    var temp = min;
-                    min = max;
-                    max = temp;
-                }
                 // Draw plot
                 PlotModel myModel = new PlotModel();
                 myModel.Title = FunctionName;
-                myModel.Series.Add(new FunctionSeries(SelectedFunction, min, max, 0.1, FunctionName.Split('=').Last()));
+                myModel.Series.Add(new FunctionSeries(SelectedFunction, _minValue, _maxValue, 0.1, FunctionName.Split('=').Last()));
                 MyPlot.Model = myModel;
-                result1 = MathNet.Numerics.Integrate.OnClosedInterval(SelectedFunction, min, max);
+                result1 = MathNet.Numerics.Integrate.OnClosedInterval(SelectedFunction, _minValue, _maxValue);
+
                 // Calcualte 
                 try
                 {
-                    result = SimpsonIntegration.SimpsonRule(SelectedFunction, min, max, intervals);
-                    
-                    
+                    result = SimpsonIntegration.SimpsonRule(SelectedFunction, _minValue, _maxValue, _interValue);
                 }
                 catch(Exception ex)
                 {
                     MessageBox.Show($"{ex.Message}", "Data Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            if(result != double.MinValue)
-            {
-                Result.Visibility = Visibility.Visible;
-                ResultTitle.Visibility = Visibility.Visible;
-                Error.Visibility = Visibility.Visible;
+            if (result != double.MinValue)
+                ShowResult(result, result1 - result);
+        }
 
-                Result.Text = result.ToString();
-                Error.Text = Math.Abs(result-result1).ToString();
+        private void ShowResult(double result, double error)
+        {
+            Result.Visibility = Visibility.Visible;
+            ResultTitle.Visibility = Visibility.Visible;
+            Error.Visibility = Visibility.Visible;
+
+            Result.Text = result.ToString();
+            Error.Text = Math.Abs(error).ToString();
+        }
+
+        private bool CheckInputData()
+        {
+            //if (SelectedFunction != null && BoundMin.Text != "" && BoundMax.Text != "" && Intervals.Value != 0)
+            try
+            {
+                _minValue = double.Parse(BoundMin.Text);
+                _maxValue = double.Parse(BoundMax.Text);
+                _interValue = (int)Intervals.Value;
+                if (_maxValue < _minValue)
+                {
+                    var temp = _minValue;
+                    _minValue = _maxValue;
+                    _maxValue = temp;
+                }
+                return true;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.GetType}: {ex.Message}", "Input Data Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return false;
         }
 
         private void PreviewTextInput(object sender, TextCompositionEventArgs e)

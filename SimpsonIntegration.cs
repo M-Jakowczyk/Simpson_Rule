@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Simpson_Rule
 {
@@ -14,6 +15,9 @@ namespace Simpson_Rule
             if (n % 2 != 0)
             {
                 throw new ArgumentException($"Liczba podziałów (n={n}) musi być parzysta.");
+            }
+            else if(n==0){
+                throw new ArgumentException($"Liczba podziałów \"n\" jest rónwa {n}!");
             }
 
             double h = (b - a) / n;

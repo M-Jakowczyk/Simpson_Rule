@@ -80,6 +80,7 @@ namespace Simpson_Rule
                 PlotModel myModel = new PlotModel();
                 myModel.Title = FunctionName;
                 myModel.Series.Add(new FunctionSeries(SelectedFunction, _minValue, _maxValue, 0.1, FunctionName.Split('=').Last()));
+                myModel.Series.Add(AddAreaShape());
                 MyPlot.Model = myModel;
                 result1 = MathNet.Numerics.Integrate.OnClosedInterval(SelectedFunction, _minValue, _maxValue);
 
@@ -128,6 +129,26 @@ namespace Simpson_Rule
                 MessageBox.Show($"{ex.GetType}: {ex.Message}", "Input Data Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return false;
+        }
+
+        private AreaSeries AddAreaShape()
+        {
+            var areaSeries = new AreaSeries
+            {
+                Color = OxyColors.LightBlue,
+                StrokeThickness = 2,
+                LineStyle = LineStyle.Solid,
+            };
+
+            var dataPoints = new List<DataPoint>();
+            for (double x = _minValue; x <= _maxValue; x += 0.1)
+            {
+                double y = SelectedFunction(x);
+                areaSeries.Points.Add(new DataPoint(x, y)); 
+                areaSeries.Points2.Add(new DataPoint(x, 0));
+            }
+
+            return areaSeries;
         }
 
         private void PreviewTextInput(object sender, TextCompositionEventArgs e)
